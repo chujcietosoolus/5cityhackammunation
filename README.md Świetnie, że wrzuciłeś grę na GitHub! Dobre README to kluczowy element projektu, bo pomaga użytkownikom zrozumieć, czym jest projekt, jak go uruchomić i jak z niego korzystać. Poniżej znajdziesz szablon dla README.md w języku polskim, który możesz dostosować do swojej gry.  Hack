@@ -1,0 +1,23 @@
+Wymagania
+Do uruchomienia gry potrzebujesz:
+
+Python 3.x
+Biblioteka Pygame
+Jeśli nie masz zainstalowanej biblioteki Pygame, możesz zainstalować ją za pomocą pip:
+pip install pygame
+Instalacja
+Sklonuj repozytorium na swój komputer:
+
+bash
+Skopiuj kod
+git clone https://github.com/TwojeKonto/hack-the-system.git
+Przejdź do katalogu projektu:
+
+bash
+Skopiuj kod
+cd hack-the-system
+Uruchom grę:
+
+bash
+Skopiuj kod
+python main.py
