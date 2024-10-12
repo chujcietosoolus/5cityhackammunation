@@ -24,14 +24,14 @@ font_size = 40  # Rozmiar czcionki
 font = pygame.font.Font(None, font_size)
 
 # Prędkość liter i linia docelowa
-LETTER_SPEED = 6  # Stała prędkość spadania liter
+LETTER_SPEED = 3  # Stała prędkość spadania liter
 LINE_Y = SCREEN_HEIGHT - 120  # Pozycja linii docelowej
 
 # Inne parametry
 score = 0
 letters = []
 letter_timer = pygame.time.get_ticks()
-letter_interval = 400  # Czas między pojawianiem się liter
+letter_interval = 600  # Czas między pojawianiem się liter
 
 # Zmienne do migania prostokąta
 blink_timer = None
@@ -93,6 +93,8 @@ def game_loop():
     letters.clear()
     letter_timer = pygame.time.get_ticks()
 
+    clock = pygame.time.Clock()  # Zegar do kontrolowania FPS
+
     running = True
     while running:
         # Obsługa zdarzeń
@@ -105,22 +107,17 @@ def game_loop():
                 for letter_data in letters:
                     letter, x, y = letter_data
                     # Sprawdzanie, czy litera została naciśnięta
-                    if chr(event.key).upper() == letter:
-                        # Sprawdzamy, czy y litery jest w obrębie prostokąta
-                        rect_y = LINE_Y - 60
-                        rect_height = 100
+                    if chr(event.key).upper() == letter and y > LINE_Y - 60:  # litera poniżej linii
+                        letters.remove(letter_data)  # Usuń trafioną literę
+                        score += 1  # Dodaj punkt
+                        
+                        # Ustaw miganie prostokąta
+                        blink_timer = pygame.time.get_ticks()
+                        blink_visible = True
+                        correct_key_pressed = True  # Zmiana na True, jeśli klawisz jest poprawny
+                        break
 
-                        if rect_y < y < rect_y + rect_height:  # Tylko, gdy litera jest w obrębie prostokąta
-                            letters.remove(letter_data)  # Usuń trafioną literę
-                            score += 1  # Dodaj punkt
-                            
-                            # Ustaw miganie prostokąta
-                            blink_timer = pygame.time.get_ticks()
-                            blink_visible = True
-                            correct_key_pressed = True  # Zmiana na True, jeśli klawisz jest poprawny
-                            break
-
-                # Kończenie gry, jeśli klawisz został naciśnięty poza prostokątem
+                # Kończenie gry, jeśli klawisz został naciśnięty poza linią
                 if not correct_key_pressed:
                     show_end_screen("Hack nieudany!")  # Komunikat o niepowodzeniu
                     running = False
@@ -174,7 +171,7 @@ def game_loop():
 
         # Aktualizacja ekranu
         pygame.display.flip()
-        pygame.time.Clock().tick(60)
+        clock.tick(120)  # Ograniczenie do 120 FPS
 
 # Uruchomienie gry
 while True:
