@@ -24,7 +24,7 @@ font_size = 40  # Rozmiar czcionki
 font = pygame.font.Font(None, font_size)
 
 # Prędkość liter i linia docelowa
-LETTER_SPEED = 3  # Stała prędkość spadania liter
+LETTER_SPEED = 4  # Zmniejszona prędkość spadania liter
 LINE_Y = SCREEN_HEIGHT - 120  # Pozycja linii docelowej
 RECT_HEIGHT = 100  # Wysokość prostokąta
 
@@ -32,7 +32,7 @@ RECT_HEIGHT = 100  # Wysokość prostokąta
 score = 0
 letters = []
 letter_timer = pygame.time.get_ticks()
-letter_interval = 600  # Czas między pojawianiem się liter
+letter_interval = 500  # Zwiększony czas między pojawianiem się liter
 
 # Zmienne do migania prostokąta
 blink_timer = None
@@ -42,7 +42,6 @@ blink_visible = False  # Flaga czy prostokąt jest widoczny
 # Funkcja dodająca nową literę
 def add_letter():
     letter = chr(random.randint(65, 71))  # Losujemy literę od A do G
-    # Ustawiamy pozycję X w granicach ekranu
     x_pos = random.randint(0, SCREEN_WIDTH - 40)  # 40 to szerokość kwadratu
     y_pos = -50  # Zaczyna nad ekranem
     letters.append([letter, x_pos, y_pos])
@@ -69,22 +68,18 @@ def loading_screen():
                 pygame.quit()
                 sys.exit()
         
-        # Obliczanie postępu ładowania
         elapsed_time = pygame.time.get_ticks() - loading_start
         if elapsed_time >= 3000:  # 3 sekundy
             loading = False
 
-        # Rysowanie ekranu ładowania
         screen.fill(BLACK)
         loading_text = font.render("Przygotuj się!", True, WHITE)  # Napis w białym kolorze
         text_rect = loading_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         screen.blit(loading_text, text_rect)
 
-        # Rysowanie paska ładowania - turkusowy od prawej do lewej
         current_length = (elapsed_time / 3000) * SCREEN_WIDTH  # Obliczanie długości paska
         pygame.draw.rect(screen, TURQUOISE, (0, SCREEN_HEIGHT - 30, current_length, 20))  # Węższy pasek
 
-        # Aktualizacja ekranu
         pygame.display.flip()
         pygame.time.Clock().tick(60)
 
@@ -182,3 +177,4 @@ while True:
     game_loop()
 
 # Zakończenie Pygame
+pygame.quit()
