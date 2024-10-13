@@ -14,10 +14,10 @@ pygame.display.set_caption("Hack the System")
 # Kolory
 WHITE = (255, 255, 255)  # Kolor biały
 BLACK = (0, 0, 0)        # Kolor czarny
-GRAY = (200, 200, 200)    # Jasny szary kolor kwadratów
-DARK_GRAY = (60, 60, 60)  # Ciemniejszy szary kolor prostokąta
-DARKER_GRAY = (30, 30, 30)  # Jeszcze ciemniejszy szary kolor prostokąta
-TURQUOISE = (64, 224, 208)  # Turkusowy kolor
+GRAY = (200, 200, 200)   # Jasny szary kolor kwadratów
+DARK_GRAY = (60, 60, 60) # Ciemniejszy szary kolor prostokąta
+DARKER_GRAY = (30, 30, 30) # Jeszcze ciemniejszy szary kolor prostokąta
+TURQUOISE = (64, 224, 208) # Turkusowy kolor
 
 # Czcionka
 font_size = 40  # Rozmiar czcionki
@@ -26,6 +26,7 @@ font = pygame.font.Font(None, font_size)
 # Prędkość liter i linia docelowa
 LETTER_SPEED = 3  # Stała prędkość spadania liter
 LINE_Y = SCREEN_HEIGHT - 120  # Pozycja linii docelowej
+RECT_HEIGHT = 100  # Wysokość prostokąta
 
 # Inne parametry
 score = 0
@@ -41,7 +42,8 @@ blink_visible = False  # Flaga czy prostokąt jest widoczny
 # Funkcja dodająca nową literę
 def add_letter():
     letter = chr(random.randint(65, 71))  # Losujemy literę od A do G
-    x_pos = random.randint(50, SCREEN_WIDTH - 100)  # Zwiększenie granic X
+    # Ustawiamy pozycję X w granicach ekranu
+    x_pos = random.randint(0, SCREEN_WIDTH - 40)  # 40 to szerokość kwadratu
     y_pos = -50  # Zaczyna nad ekranem
     letters.append([letter, x_pos, y_pos])
 
@@ -107,7 +109,7 @@ def game_loop():
                 for letter_data in letters:
                     letter, x, y = letter_data
                     # Sprawdzanie, czy litera została naciśnięta
-                    if chr(event.key).upper() == letter and y > LINE_Y - 60:  # litera poniżej linii
+                    if chr(event.key).upper() == letter and LINE_Y - RECT_HEIGHT < y < LINE_Y:
                         letters.remove(letter_data)  # Usuń trafioną literę
                         score += 1  # Dodaj punkt
                         
@@ -136,7 +138,8 @@ def game_loop():
         # Aktualizacja pozycji liter
         for letter_data in letters:
             letter_data[2] += LETTER_SPEED
-            if letter_data[2] > SCREEN_HEIGHT:  # Jeśli litera spadnie za ekran
+            # Sprawdzenie, czy litera przekroczyła dół ekranu
+            if letter_data[2] > SCREEN_HEIGHT:  
                 show_end_screen("Hack nieudany!")  # Komunikat o niepowodzeniu
                 running = False  # Gra się kończy, jeśli litera spadnie za ekran
 
@@ -144,8 +147,8 @@ def game_loop():
         screen.fill(BLACK)
 
         # Rysowanie prostokąta, w którym można klikać litery
-        rect_y = LINE_Y - 60  # Pozycja prostokąta
-        pygame.draw.rect(screen, DARKER_GRAY, (0, rect_y, SCREEN_WIDTH, 100), border_radius=20)  # Ciemniejszy szary prostokąt z zaokrąglonymi krawędziami
+        rect_y = LINE_Y - RECT_HEIGHT  # Pozycja prostokąta
+        pygame.draw.rect(screen, DARKER_GRAY, (0, rect_y, SCREEN_WIDTH, RECT_HEIGHT), border_radius=20)  # Ciemniejszy szary prostokąt z zaokrąglonymi krawędziami
 
         # Rysowanie liter w małych, zaokrąglonych kwadratach
         square_size = 40  # Zmniejszony rozmiar kwadratów
@@ -179,4 +182,3 @@ while True:
     game_loop()
 
 # Zakończenie Pygame
-pygame.quit()
