@@ -24,7 +24,7 @@ font_size = 40  # Rozmiar czcionki
 font = pygame.font.Font(None, font_size)
 
 # Prędkość liter i linia docelowa
-LETTER_SPEED = 4  # Zmniejszona prędkość spadania liter
+LETTER_SPEED = 6  # Zwiększona prędkość spadania liter
 LINE_Y = SCREEN_HEIGHT - 120  # Pozycja linii docelowej
 RECT_HEIGHT = 100  # Wysokość prostokąta
 
@@ -32,7 +32,7 @@ RECT_HEIGHT = 100  # Wysokość prostokąta
 score = 0
 letters = []
 letter_timer = pygame.time.get_ticks()
-letter_interval = 500  # Zwiększony czas między pojawianiem się liter
+letter_interval = 300  # Zwiększona częstotliwość pojawiania się liter (mniej czasu między literami)
 
 # Zmienne do migania prostokąta
 blink_timer = None
